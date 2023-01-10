@@ -1,0 +1,17 @@
+MOTIVATION
+
+Processos de diagnóstico unreliable (detação de marcadores no sangue, muitos falsos positivos), invasivos (biopsia, por vezes múltiplas. TRUS guided pode não identificar o tumor) e potencialmente caros  
+
+
+################################################################################
+
+
+NOSSOS DADOS:
+Para cada paciente temos um ficheiro CASE que contém o volume de Ressonancias magneticas (MR) scans (imagem médica da próstata) e um ficheiro SEG que contém um volume composto por matrizes binárias, estas são as máscaras da região de interesse demarcada pelo profissional qualificado como sendo cancro
+
+
+
+###########################################################################
+PROCESSO
+
+Carregar MRs e SEGS por ordem alfabética. Para cada MR percorrer todas as imagens que o compõem
