@@ -278,8 +278,8 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
  
           pause(0.01)    
 
-          %fazer o estudo do GLCMs para cada um dos pixeis das região de
-          %interesse CG e PZ
+          %Criar os paineis e a estrutura que vai guardar os campos de cada
+          %um pixeis das zonas de interesse
 
           casename=cases(p);
           casename=casename{1};
@@ -288,6 +288,7 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
 
           %tamanho dos paineis
           %cada painel vai ser sujeito a uma análise de GLCM
+          %dimensões painel = (2n+1)*(2n+1)
           panel_size=2;
 
           %PZ
@@ -304,7 +305,6 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
               tumor.(casename).PZ.(img_num).(pixel_count).y=y(k);
               tumor.(casename).PZ.(img_num).(pixel_count).panel=panel;
               tumor.(casename).PZ.(img_num).(pixel_count).glcm=[];
-              tumor.(casename).PZ.(img_num).(pixel_count).contrast=[];
               tumor.(casename).PZ.(img_num).(pixel_count).correlation=[];
               tumor.(casename).PZ.(img_num).(pixel_count).energy=[];
               tumor.(casename).PZ.(img_num).(pixel_count).homogeneity=[];
@@ -325,15 +325,12 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
               tumor.(casename).CG.(img_num).(pixel_count).y=y(k);
               tumor.(casename).CG.(img_num).(pixel_count).panel=panel;
               tumor.(casename).CG.(img_num).(pixel_count).glcm=[];
-              tumor.(casename).CG.(img_num).(pixel_count).contrast=[];
               tumor.(casename).CG.(img_num).(pixel_count).correlation=[];
               tumor.(casename).CG.(img_num).(pixel_count).energy=[];
               tumor.(casename).CG.(img_num).(pixel_count).homogeneity=[];
 
           end
-
       end
-
   end
 
   %Cálculo das glcms e propriedades para todos os paineis guardados
@@ -382,7 +379,6 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
 
                   %saving computed values
                   tumor.(casename).(zone).(img_number).(pixel_count).glcm=GLCM;
-                  tumor.(casename).(zone).(img_number).(pixel_count).contrast=properties.Contrast;
                   tumor.(casename).(zone).(img_number).(pixel_count).correlation=properties.Correlation;
                   tumor.(casename).(zone).(img_number).(pixel_count).energy=properties.Energy;
                   tumor.(casename).(zone).(img_number).(pixel_count).homogeneity=properties.Homogeneity;
@@ -409,8 +405,6 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
   pixels_cg=fieldnames(tumor.ProstateCase1.CG.img_6);
   pixels_pz=fieldnames(tumor.ProstateCase1.PZ.img_6);
 
-  contrast_values_cg=zeros(2303,5);
-  contrast_values_pz=zeros(769,5);
   correlation_values_cg=zeros(2303,5);
   correlation_values_pz=zeros(769,5);
   energy_values_cg=zeros(2303,5);
@@ -423,9 +417,6 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
      px=px{1};
      px_values=tumor.ProstateCase1.CG.img_6.(px);
 
-     contrast_color_idx=round( (px_values.contrast/(size(px_values.glcm,1)-1)^2)*255+0.5 );
-     contrast_color=map(contrast_color_idx, :);
-
      correlation_color_idx=round((px_values.correlation+1)*122.5);
      correlation_color=map(correlation_color_idx, :);
 
@@ -435,7 +426,6 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
      homogeneity_color_idx=round(px_values.homogeneity*255);
      homogeneity_color=map(homogeneity_color_idx, :);
 
-     contrast_values_cg(pixel,:)=[contrast_color(1) contrast_color(2) contrast_color(3) px_values.y px_values.x]; 
      correlation_values_cg(pixel,:)=[correlation_color(1) correlation_color(2) correlation_color(3) px_values.y px_values.x];
      energy_values_cg(pixel,:)=[energy_color(1) energy_color(2) energy_color(3) px_values.y px_values.x];
      homogeneity_values_cg(pixel, :)=[homogeneity_color(1) homogeneity_color(2) homogeneity_color(3) px_values.y px_values.x];
@@ -447,9 +437,6 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
      px=px{1};
      px_values=tumor.ProstateCase1.PZ.img_6.(px);
 
-     contrast_color_idx=round( (px_values.contrast/(size(px_values.glcm,1)-1)^2)*255+0.5 );
-     contrast_color=map(contrast_color_idx, :);
-
      correlation_color_idx=round((px_values.correlation+1)*122.5);
      correlation_color=map(correlation_color_idx, :);
 
@@ -459,7 +446,6 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
      homogeneity_color_idx=round(px_values.homogeneity*255);
      homogeneity_color=map(homogeneity_color_idx, :);
 
-     contrast_values_pz(pixel,:)=[contrast_color(1) contrast_color(2) contrast_color(3) px_values.y px_values.x];
      correlation_values_pz(pixel,:)=[correlation_color(1) correlation_color(2) correlation_color(3) px_values.y px_values.x];
      energy_values_pz(pixel,:)=[energy_color(1) energy_color(2) energy_color(3) px_values.y px_values.x];
      homogeneity_values_pz(pixel, :)=[homogeneity_color(1) homogeneity_color(2) homogeneity_color(3) px_values.y px_values.x];
@@ -475,17 +461,6 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
   colorbar
   title('Segmentation')
 
-  %{
-  hold on;
-
-  for v=1:size(contrast_values_cg,1)
-        plot(contrast_values_cg(v,5), contrast_values_cg(v,4), 'color' , [contrast_values_cg(v,1) contrast_values_cg(v,2) contrast_values_cg(v,3)] ,'Marker','.' ,'LineWidth', 0.05)
-  end
-  for v=1:size(contrast_values_pz,1)
-        plot(contrast_values_pz(v,5), contrast_values_pz(v,4), 'color' , [contrast_values_pz(v,1) contrast_values_pz(v,2) contrast_values_pz(v,3)] ,'Marker','.' ,'LineWidth', 0.05)
-  end
-  %}
-
   subplot(2,2,2)
   imshow(trial, [win_lo win_hi])
   colorbar
@@ -493,10 +468,10 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
   hold on;
 
   for v=1:size(correlation_values_cg,1)
-        plot(correlation_values_cg(v,5), correlation_values_cg(v,4), 'color' , [correlation_values_cg(v,1) correlation_values_cg(v,2) correlation_values_cg(v,3)] ,'Marker','.' ,'LineWidth', 0.05)
+        plot(correlation_values_cg(v,5), correlation_values_cg(v,4), 'color' , [correlation_values_cg(v,1) correlation_values_cg(v,2) correlation_values_cg(v,3)] ,'Marker', '.', 'MarkerSize', 0.01)
   end
   for v=1:size(correlation_values_pz,1)
-        plot(correlation_values_pz(v,5), correlation_values_pz(v,4), 'color' , [correlation_values_pz(v,1) correlation_values_pz(v,2) correlation_values_pz(v,3)] ,'Marker','.' ,'LineWidth', 0.05)
+        plot(correlation_values_pz(v,5), correlation_values_pz(v,4), 'color' , [correlation_values_pz(v,1) correlation_values_pz(v,2) correlation_values_pz(v,3)] ,'Marker', '.', 'MarkerSize', 0.01)
   end
 
   
@@ -507,10 +482,10 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
   hold on;
 
   for v=1:size(energy_values_cg,1)
-        plot(energy_values_cg(v,5), energy_values_cg(v,4), 'color' , [energy_values_cg(v,1) energy_values_cg(v,2) energy_values_cg(v,3)] ,'Marker','.' ,'LineWidth', 0.05)
+        plot(energy_values_cg(v,5), energy_values_cg(v,4), 'color' , [energy_values_cg(v,1) energy_values_cg(v,2) energy_values_cg(v,3)] ,'Marker', '.', 'MarkerSize', 0.01)
   end
   for v=1:size(energy_values_pz,1)
-        plot(energy_values_pz(v,5), energy_values_pz(v,4), 'color' , [energy_values_pz(v,1) energy_values_pz(v,2) energy_values_pz(v,3)] ,'Marker','.' ,'LineWidth', 0.05)
+        plot(energy_values_pz(v,5), energy_values_pz(v,4), 'color' , [energy_values_pz(v,1) energy_values_pz(v,2) energy_values_pz(v,3)] ,'Marker', '.', 'MarkerSize', 0.01)
   end
 
   subplot(2,2,4)
@@ -520,10 +495,10 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
   hold on;
 
   for v=1:size(homogeneity_values_cg,1)
-        plot(homogeneity_values_cg(v,5), homogeneity_values_cg(v,4), 'color' , [homogeneity_values_cg(v,1) homogeneity_values_cg(v,2) homogeneity_values_cg(v,3)] ,'Marker','.' ,'LineWidth', 0.05)
+        plot(homogeneity_values_cg(v,5), homogeneity_values_cg(v,4), 'color' , [homogeneity_values_cg(v,1) homogeneity_values_cg(v,2) homogeneity_values_cg(v,3)] ,'Marker','.' , 'MarkerSize', 0.01)
   end
   for v=1:size(homogeneity_values_pz,1)
-        plot(homogeneity_values_pz(v,5), homogeneity_values_pz(v,4), 'color' , [homogeneity_values_pz(v,1) homogeneity_values_pz(v,2) homogeneity_values_pz(v,3)] ,'Marker','.' ,'LineWidth', 0.05)
+        plot(homogeneity_values_pz(v,5), homogeneity_values_pz(v,4), 'color' , [homogeneity_values_pz(v,1) homogeneity_values_pz(v,2) homogeneity_values_pz(v,3)] ,'Marker','.' , 'MarkerSize', 0.01)
   end
 
 end

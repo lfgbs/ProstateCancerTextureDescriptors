@@ -7,11 +7,30 @@ Processos de diagnóstico unreliable (detação de marcadores no sangue, muitos 
 
 
 NOSSOS DADOS:
-Para cada paciente temos um ficheiro CASE que contém o volume de Ressonancias magneticas (MR) scans (imagem médica da próstata) e um ficheiro SEG que contém um volume composto por matrizes binárias, estas são as máscaras da região de interesse demarcada pelo profissional qualificado como sendo cancro
+Para cada paciente temos um ficheiro CASE que contém o volume de Ressonancias magneticas (MR) scans (imagem médica da próstata) e um ficheiro SEG que contém um volume composto por matrizes binárias, estas são as máscaras da região de interesse demarcada pelo profissional qualificado como sendo Glândula Central (CG) e Zona Periférica(PZ).
 
 
 
 ###########################################################################
 PROCESSO
 
-Carregar MRs e SEGS por ordem alfabética. Para cada MR percorrer todas as imagens que o compõem
+Carregar MRs e SEGS por ordem alfabética e o colormap que vai ser utilizado para a representação visual dos descritores de textura. 
+
+Para cada MR percorrer todas as imagens que o compõem. Pelos metadados perceber qual a melhor gama de representação. Usar a respetiva segmentação para separar  CG de PZ
+
+Percorrer os pixeis pertencentes a cada uma das zonas de interesse e cortar da imagem um painel 5x5 (tamanho do painel pode ser variado) centrado nesse mesmo pixel. Preparar estrutura que vai guardar o painel, informação da posição do pixel, a glcm e os descritores de textura. Os cálculos da glcm e dos descritores não é feito nesta fase porque o tempo de computação criava muito delay para a animação "Distribuição do Tumor" que ocorre em simultâneo. Esta animação mostra ao utilizador 6 subplots para cada imagem do caso clínico contedo MR original, MR com zonas de interesse contornadas a vermelho, segmentação feita pelo profissional, Zonas de interesse isoladas (CG + PZ), PZ isolada e, finalmente, CG isolada.
+
+Calcular GLCM e descritores para cada um dos paineis guardados. O matlab tem in-built functions para calcular 4 dos descritores de textura contrast, homogeneity, energy e correlation. Nesta implementação só usamos 3 deles (homogeneity, energy e correlation) porque homogeneity e contrast são inversamente proporcionais pelo que não vale a pena usar os dois. Podemos adicionar mais descritores (as suas fórmulas já são conhecidas) mas as funções têm de ser criadas por nós.
+
+Representar visualmente os descritores para a imagem nº6 do caso clínico ProstateCancer1. Isto atinge-se transformando, para cada pixel, os valores de cada um dos descritores associados num valor de 0 a 255. Esse valor é usado para aceder a uma posição do colormap, essa cor é usada para desenhar um ponto sobre a imagem na posição do pixel analisado.
+
+
+
+###################GLCM PROPERTIES##################################3
+Contrast - A glcm produz uma imagem onde a diagonal principal indica o nº de pares de pixeis (pixeis vizinhos contiguos) com o mesmo valor portanto quanto mais distante da diagonal está uma célula maior deve ser o seu peso no cálculo do contraste pois mais dispar é o valor dos pixeis. Contrast=0 a imagem é constante. 
+
+Homogeneity - Conceito contrário ao contraste. Peso diminui ao afastar da diagonal principal. homogeneity=1 indica imagem constante.
+
+Energy - 
+
+Correlation - Alta correlação indica alta predictability da relação entre 2 pixeis. Varia entre -1 e 1
