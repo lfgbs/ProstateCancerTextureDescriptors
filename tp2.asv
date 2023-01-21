@@ -473,9 +473,7 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
   subplot(2,2,1)
   imshow(segtrial, [0 2])
   colorbar
-  title('Segmentation')
-
-  %{
+  title('Contrast')
   hold on;
 
   for v=1:size(contrast_values_cg,1)
@@ -484,7 +482,6 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
   for v=1:size(contrast_values_pz,1)
         plot(contrast_values_pz(v,5), contrast_values_pz(v,4), 'color' , [contrast_values_pz(v,1) contrast_values_pz(v,2) contrast_values_pz(v,3)] ,'Marker','.' ,'LineWidth', 0.05)
   end
-  %}
 
   subplot(2,2,2)
   imshow(trial, [win_lo win_hi])
@@ -507,10 +504,10 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
   hold on;
 
   for v=1:size(energy_values_cg,1)
-        plot(energy_values_cg(v,5), energy_values_cg(v,4), 'color' , [energy_values_cg(v,1) energy_values_cg(v,2) energy_values_cg(v,3)] ,'Marker','.' ,'LineWidth', 0.05)
+        plot(energy_values_cg(v,5), energy_values_cg(v,4), 'color' , [energy_values_cg(v,1) energy_values_cg(v,2) energy_values_cg(v,3)] ,'Marker','.' ,'LineWidth', 0.1)
   end
   for v=1:size(energy_values_pz,1)
-        plot(energy_values_pz(v,5), energy_values_pz(v,4), 'color' , [energy_values_pz(v,1) energy_values_pz(v,2) energy_values_pz(v,3)] ,'Marker','.' ,'LineWidth', 0.05)
+        plot(energy_values_pz(v,5), energy_values_pz(v,4), 'color' , [energy_values_pz(v,1) energy_values_pz(v,2) energy_values_pz(v,3)] ,'Marker','.' ,'LineWidth', 0.1)
   end
 
   subplot(2,2,4)
@@ -520,10 +517,10 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
   hold on;
 
   for v=1:size(homogeneity_values_cg,1)
-        plot(homogeneity_values_cg(v,5), homogeneity_values_cg(v,4), 'color' , [homogeneity_values_cg(v,1) homogeneity_values_cg(v,2) homogeneity_values_cg(v,3)] ,'Marker','.' ,'LineWidth', 0.05)
+        plot(homogeneity_values_cg(v,5), homogeneity_values_cg(v,4), 'color' , [homogeneity_values_cg(v,1) homogeneity_values_cg(v,2) homogeneity_values_cg(v,3)] ,'Marker','.' ,'LineWidth', 0.5)
   end
   for v=1:size(homogeneity_values_pz,1)
-        plot(homogeneity_values_pz(v,5), homogeneity_values_pz(v,4), 'color' , [homogeneity_values_pz(v,1) homogeneity_values_pz(v,2) homogeneity_values_pz(v,3)] ,'Marker','.' ,'LineWidth', 0.05)
+        plot(homogeneity_values_pz(v,5), homogeneity_values_pz(v,4), 'color' , [homogeneity_values_pz(v,1) homogeneity_values_pz(v,2) homogeneity_values_pz(v,3)] ,'Marker','.' ,'LineWidth', 0.5)
   end
 
 end
