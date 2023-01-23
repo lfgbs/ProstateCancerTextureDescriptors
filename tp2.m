@@ -564,7 +564,7 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
   %VISUALIZAÇÃO
 
   %Representar as propriedades usando a imagem 6 do caso clínico n
-  caseID=3;
+  caseID=1;
   pimg = dicomread(strcat("/home/luisfgbs/AII/TP2/imgs/", imagefiles(caseID).name));
   pimg=squeeze(pimg);
   simg = dicomread(strcat("/home/luisfgbs/AII/TP2/imgs/", segmentationfiles(caseID).name));
@@ -746,5 +746,3 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
   end
 
 end
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%FUNCTIONS%%%%%%%%%%%%%%%%%%
