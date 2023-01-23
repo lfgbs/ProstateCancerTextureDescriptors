@@ -26,7 +26,7 @@ Representar visualmente os descritores para a imagem nº6 do caso clínico Prost
 
 
 
-###################GLCM PROPERTIES##################################3
+###################GLCM PROPERTIES##################################
 Contrast - A glcm produz uma imagem onde a diagonal principal indica o nº de pares de pixeis (pixeis vizinhos contiguos) com o mesmo valor portanto quanto mais distante da diagonal está uma célula maior deve ser o seu peso no cálculo do contraste pois mais dispar é o valor dos pixeis. Contrast=0 a imagem é constante. 
 
 Homogeneity - Conceito contrário ao contraste. Peso diminui ao afastar da diagonal principal. homogeneity=1 indica imagem constante.
@@ -34,3 +34,9 @@ Homogeneity - Conceito contrário ao contraste. Peso diminui ao afastar da diago
 Energy - 
 
 Correlation - Alta correlação indica alta predictability da relação entre 2 pixeis. Varia entre -1 e 1
+
+
+
+#####################################################################
+Sabemos computar valores para as propriedad
+

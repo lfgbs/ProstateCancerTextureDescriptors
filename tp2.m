@@ -563,19 +563,24 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
 
   %VISUALIZAÇÃO
 
-  %Representar as propriedades usando a imagem 6 do caso clínico 1
-  pimg = dicomread(strcat("/home/luisfgbs/AII/TP2/imgs/", imagefiles(1).name));
+  %Representar as propriedades usando a imagem 6 do caso clínico n
+  caseID=3;
+  pimg = dicomread(strcat("/home/luisfgbs/AII/TP2/imgs/", imagefiles(caseID).name));
   pimg=squeeze(pimg);
-  simg = dicomread(strcat("/home/luisfgbs/AII/TP2/imgs/", segmentationfiles(1).name));
+  simg = dicomread(strcat("/home/luisfgbs/AII/TP2/imgs/", segmentationfiles(caseID).name));
   simg=squeeze(simg);
 
   %ir buscar a imagem
   trial=pimg(:,:,6);
   segtrial=simg(:,:,6);
 
+  casenames={'ProstateCase1', 'ProstateCase2' ,'ProstateCase3'};
+  cn=casenames(caseID);
+  casename=cn{1};
+
   %carregar valores
-  pixels_cg=fieldnames(tumor.ProstateCase1.CG.img_6);
-  pixels_pz=fieldnames(tumor.ProstateCase1.PZ.img_6);
+  pixels_cg=fieldnames(tumor.(casename).CG.img_6);
+  pixels_pz=fieldnames(tumor.(casename).PZ.img_6);
 
   correlation_values_cg=zeros(2303,5);
   correlation_values_pz=zeros(769,5);
@@ -587,7 +592,7 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
   for pixel=1:size(pixels_cg,1)
      px=pixels_cg(pixel);
      px=px{1};
-     px_values=tumor.ProstateCase1.CG.img_6.(px);
+     px_values=tumor.(casename).CG.img_6.(px);
 
      correlation_color_idx=round((px_values.correlation+1)*122.5);
      correlation_color=map(correlation_color_idx, :);
@@ -607,7 +612,7 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
   for pixel=1:size(pixels_pz,1)
      px=pixels_pz(pixel);
      px=px{1};
-     px_values=tumor.ProstateCase1.PZ.img_6.(px);
+     px_values=tumor.(casename).PZ.img_6.(px);
 
      correlation_color_idx=round((px_values.correlation+1)*122.5);
      correlation_color=map(correlation_color_idx, :);
@@ -626,16 +631,13 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
 
   figure
   set(gcf, 'Position',  [1000, 150, 800, 700]) 
-  colorbar("eastoutside")
 
   subplot(2,2,1)
   imshow(segtrial, [0 2])
-  colorbar
   title('Segmentation')
 
   subplot(2,2,2)
   imshow(trial, [win_lo win_hi])
-  colorbar
   title('Correlation')
   hold on;
 
@@ -649,7 +651,6 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
   
   subplot(2,2,3)
   imshow(trial, [win_lo win_hi])
-  colorbar
   title('Energy')
   hold on;
 
@@ -662,7 +663,6 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
 
   subplot(2,2,4)
   imshow(trial, [win_lo win_hi])
-  colorbar
   title('Homogeneity')
   hold on;
 
@@ -673,6 +673,7 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
         plot(homogeneity_values_pz(v,5), homogeneity_values_pz(v,4), 'color' , [homogeneity_values_pz(v,1) homogeneity_values_pz(v,2) homogeneity_values_pz(v,3)] ,'Marker','.' , 'MarkerSize', 0.01)
   end
 
+  %Análise
   %plots das averages
   casenames=fieldnames(tumor);
 
