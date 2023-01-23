@@ -674,83 +674,75 @@ if ismember(exercise, list_of_exercises) %... if exer. in list_of_exercises
   end
 
   %plots das averages
-  figure
-  set(gcf, 'Position',  [1000, 150, 800, 700]) 
+  casenames=fieldnames(tumor);
 
-  imgs=fieldnames(results.ProstateCase1.CG);
+  for cn=1:size(casenames,1)
 
-  correlation_averages_cg=zeros(size(imgs,1), 1);
-  energy_averages_cg=zeros(size(imgs,1), 1);
-  homogeneity_averages_cg=zeros(size(imgs,1), 1);
+      name=casenames(cn);
+      casename=name{1};
 
-  for n=1:size(imgs)
+      figure
+      set(gcf, 'Position',  [1000, 150, 800, 700]) 
 
-      number=imgs(n);
-      img_number=number{1};
-      
-      correlation_averages_cg(n)=results.ProstateCase1.CG.(img_number).avg_correlation;
-      energy_averages_cg(n)=results.ProstateCase1.CG.(img_number).avg_energy;
-      homogeneity_averages_cg(n)=results.ProstateCase1.CG.(img_number).avg_homogeneity;
+      imgs=fieldnames(results.(casename).CG);
+
+      correlation_averages_cg=zeros(size(imgs,1), 1);
+      energy_averages_cg=zeros(size(imgs,1), 1);
+      homogeneity_averages_cg=zeros(size(imgs,1), 1);
+    
+      for n=1:size(imgs)
+    
+          number=imgs(n);
+          img_number=number{1};
+          
+          correlation_averages_cg(n)=results.(casename).CG.(img_number).avg_correlation;
+          energy_averages_cg(n)=results.(casename).CG.(img_number).avg_energy;
+          homogeneity_averages_cg(n)=results.(casename).CG.(img_number).avg_homogeneity;
+    
+      end
+    
+      imgs=fieldnames(results.(casename).PZ);
+    
+      correlation_averages_pz=zeros(size(imgs,1), 1);
+      energy_averages_pz=zeros(size(imgs,1), 1);
+      homogeneity_averages_pz=zeros(size(imgs,1), 1);
+    
+      for n=1:size(imgs)
+    
+          number=imgs(n);
+          img_number=number{1};
+          
+          correlation_averages_pz(n)=results.(casename).PZ.(img_number).avg_correlation;
+          energy_averages_pz(n)=results.(casename).PZ.(img_number).avg_energy;
+          homogeneity_averages_pz(n)=results.(casename).PZ.(img_number).avg_homogeneity;
+    
+      end
+    
+      subplot(2,3,1)
+      plot(correlation_averages_cg, 'LineWidth', 1, 'Marker', '.', 'MarkerSize', 10)
+      title({'Correlation value (CG)', casename})
+    
+      subplot(2,3,2)
+      plot(energy_averages_cg, 'LineWidth', 1, 'Marker', '.', 'MarkerSize', 10)
+      title({'Energy value (CG)', casename})
+    
+      subplot(2,3,3)
+      plot(homogeneity_averages_cg, 'LineWidth', 1, 'Marker', '.', 'MarkerSize', 10)
+      title({'Homogeneity value (CG)', casename})
+    
+      subplot(2,3,4)
+      plot(correlation_averages_pz, 'LineWidth', 1, 'Marker', '.', 'MarkerSize', 10)
+      title({'Correlation value (PZ)', casename})
+    
+      subplot(2,3,5)
+      plot(energy_averages_pz, 'LineWidth', 1, 'Marker', '.', 'MarkerSize', 10)
+      title('Energy value (PZ)', casename)
+    
+      subplot(2,3,6)
+      plot(homogeneity_averages_pz, 'LineWidth', 1, 'Marker', '.', 'MarkerSize', 10)
+      title('Homogeneity value (PZ)', casename)
 
   end
-
-  imgs=fieldnames(results.ProstateCase1.CG);
-
-  correlation_averages_cg=zeros(size(imgs,1), 1);
-  energy_averages_cg=zeros(size(imgs,1), 1);
-  homogeneity_averages_cg=zeros(size(imgs,1), 1);
-
-  for n=1:size(imgs)
-
-      number=imgs(n);
-      img_number=number{1};
-      
-      correlation_averages_cg(n)=results.ProstateCase1.CG.(img_number).avg_correlation;
-      energy_averages_cg(n)=results.ProstateCase1.CG.(img_number).avg_energy;
-      homogeneity_averages_cg(n)=results.ProstateCase1.CG.(img_number).avg_homogeneity;
-
-  end
-
-  imgs=fieldnames(results.ProstateCase1.PZ);
-
-  correlation_averages_pz=zeros(size(imgs,1), 1);
-  energy_averages_pz=zeros(size(imgs,1), 1);
-  homogeneity_averages_pz=zeros(size(imgs,1), 1);
-
-  for n=1:size(imgs)
-
-      number=imgs(n);
-      img_number=number{1};
-      
-      correlation_averages_pz(n)=results.ProstateCase1.PZ.(img_number).avg_correlation;
-      energy_averages_pz(n)=results.ProstateCase1.PZ.(img_number).avg_energy;
-      homogeneity_averages_pz(n)=results.ProstateCase1.PZ.(img_number).avg_homogeneity;
-
-  end
-
-  subplot(2,3,1)
-  plot(correlation_averages_cg)
-  title('Correlation value in MR Case 1 (CG)')
-
-  subplot(2,3,2)
-  plot(energy_averages_cg)
-  title('Energy value in MR Case 1 (CG)')
-
-  subplot(2,3,3)
-  plot(homogeneity_averages_cg)
-  title('Homogeneity value in MR Case 1 (CG)')
-
-  subplot(2,3,4)
-  plot(correlation_averages_pz)
-  title('Correlation value in MR Case 1 (PZ)')
-
-  subplot(2,3,5)
-  plot(energy_averages_pz)
-  title('Energy value in MR Case 1 (PZ)')
-
-  subplot(2,3,6)
-  plot(homogeneity_averages_pz)
-  title('Homogeneity value in MR Case 1 (PZ)')
 
 end
 
